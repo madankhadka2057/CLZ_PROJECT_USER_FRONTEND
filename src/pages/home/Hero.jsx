@@ -16,7 +16,7 @@ function Hero() {
     // cssEase: `cubic-bezier(0.25, 0.1, 0.25, 1.0) (default ease)`
   };
   return (
-    <div className=" slider-container relative bg-gradient-to-r from-purple-600 to-blue-600 h-screen text-white overflow-hidden">
+    <div className="  slider-container relative bg-gradient-to-r from-purple-600 to-blue-600 h-screen text-white overflow-hidden">
       <div className="w-full h-full absolute inset-0">
         <Slider {...settings} className=" h-auto ">
  

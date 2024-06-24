@@ -2,11 +2,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* @layer base{
-  body{
-    background-color: red;
-  }
-} */
+/* @layer base{ */
+  /* body{
+    background-color:black;
+    
+  } */
+   html{
+    /* background: #000; */
+    html {
+      scroll-behavior: smooth;
+    }
+   }
+/* } */
 
 .slick-slide > div>*{
   height: 100vh;
