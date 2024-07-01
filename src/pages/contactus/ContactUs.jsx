@@ -102,10 +102,12 @@ const ContactUs = () => {
               <input type='email' placeholder='Email'
                 className={`w-full bg-gray-100 rounded-lg py-3 px-6 text-sm outline-none ${errors?.email ? ' border-2 border-red-600 border-solid' : ''}`}
                 {...register("email", {
-                  required: {
-                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                    message: 'Please enter your email'
+                  required:'Please enter your email',
+                  pattern:{
+                    value:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                    message:"Invalid email partten "
                   }
+                  
                 })
 
                 }

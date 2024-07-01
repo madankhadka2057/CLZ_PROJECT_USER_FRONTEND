@@ -67,11 +67,11 @@ const Navbar = () => {
             >
               <span>Log In</span>
             </button>
-            <button
+            <button onClick={()=>navigate('/singup')}
               className="hidden select-none rounded-lg bg-gradient-to-tr from-gray-900 to-gray-800 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none sm:inline-block"
               type="button"
             >
-              <span>Sign in</span>
+              <span>Sign Up</span>
             </button>
           </div>
           <button
@@ -143,11 +143,11 @@ const Navbar = () => {
           >
             <span>Log In</span>
           </button>
-          <button
+          <button onClick={()=>navigate('/singup')}
             className="w-80  select-none rounded-md mb-4 bg-gradient-to-tr from-gray-600 to-gray-800 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block lg:w-auto"
             type="button"
           >
-            <span>Sign in</span>
+            <span>Sign Up</span>
           </button>
         </div>
       </div>

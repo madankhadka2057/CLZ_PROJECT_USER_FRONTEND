@@ -1,7 +1,7 @@
 
 const OurFeatures = () => {
   return (
- <section className="scroll-smooth md:py-20 py-8 font-[sans-serif] ">
+ <section className=" scroll-smooth md:py-20 py-8 font-[sans-serif] ">
     <div className="mx-auto max-w-7xl md:px-4 sm:px-6 lg:px-8">
           <div className=" mb-0 md:mb-8 lg:mb-10 flex justify-center  items-center flex-col gap-x-0 md:gap-y-2 lg:gap-y-0  max-md:max-w-lg max-md:mx-auto">
               <div className="relative w-full text-center flex justify-center items-center ">
