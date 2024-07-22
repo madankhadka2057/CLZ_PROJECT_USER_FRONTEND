@@ -1,1 +1,0 @@
-hatako hau rw
