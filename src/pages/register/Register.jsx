@@ -1,9 +1,17 @@
 import { useForm } from "react-hook-form"
-
+import axios from "axios"
 const Register = () => {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm()
-
+    const HandleRegister=async(data)=>{
+        console.log(data)
+        const response=await axios.post("http://localhost:3000/auth/register",data).then(()=>{
+            alert("Register successfully")
+        }).catch((error)=>{
+            alert(error.message)
+        })
+        console.log(response)
+    }
     return (
         <div className="max-w-4xl mx-auto font-[sans-serif] p-6">
             <div className="text-center mb-16">
@@ -13,7 +21,7 @@ const Register = () => {
                 <h4 className="text-gray-800 text-base font-semibold mt-6">Sign up into your account</h4>
             </div>
 
-            <form>
+            <form onSubmit={handleSubmit(HandleRegister)}>
                 <div className="grid sm:grid-cols-2 gap-8">
                     <div>
                         <label className="text-gray-800 text-sm mb-2 block">Full Name</label>
@@ -68,7 +76,11 @@ const Register = () => {
                     </div>
                     <div>
                         <label className="text-gray-800 text-sm mb-2 block">Password</label>
-                        <input name="password" type="password" className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter password" />
+                        <input name="password" type="password" className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter password" 
+                        {...register("password",{
+                            required:'Please entered your password'
+                        })}
+                        />
                         <ul className="mt-2 px-4 grid sm:grid-cols-2 gap-y-1 gap-x-6 w-max list-disc">
                             <li className="text-xs text-orange-500">minimum 8 characters</li>
                             <li className="text-xs text-orange-500">one uppercase characters</li>
@@ -79,7 +91,7 @@ const Register = () => {
                 </div>
 
                 <div className="!mt-12  ">
-                    <button type="button" className="py-3.5 px-7  text-sm font-semibold tracking-wider rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                    <button type="submit" className="py-3.5 px-7  text-sm font-semibold tracking-wider rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
                         Sign up
                     </button>
                 </div>

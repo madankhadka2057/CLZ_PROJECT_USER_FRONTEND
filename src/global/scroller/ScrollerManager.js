@@ -6,11 +6,9 @@ const ScrollerManager = () => {
  
   useEffect(()=>{
     window.scrollTo({top:0})
+    // console.log("Location:-"+location.pathname)
   },[location.pathname])
   
-  console.log(window.innerHeight)
-  console.log(window.outerHeight)
-
 }
 
 export default ScrollerManager

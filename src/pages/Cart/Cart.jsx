@@ -1,57 +1,117 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchCartItem, RemoveItemFromCart, updateCartItem } from "../../store/cartSlice";
 
 const Cart = () => {
-  const items = [
-    { id: 1, name: 'Apple Watch Series 7 - 44mm', color: 'Golden', price: 259, image: 'assets/food_background2.jpg', quantity: 1 },
-    { id: 2, name: 'Beylob 90 Speaker', color: 'Space Gray', price: 99, image: 'image-url', quantity: 1 },
-    { id: 3, name: 'Beoplay M5 Bluetooth Speaker', color: 'Silver Collection', price: 129, image: 'image-url', quantity: 1 },
-    { id: 4, name: 'Apple Watch Series 7 - 44mm', color: 'Golden', price: 379, image: 'image-url', quantity: 1 },
-  ];
-
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = 10;
-  const total = subtotal + shipping;
-
-  return (
-    <div className="p-4 max-w-3xl mx-auto flex justify-center items-center">
-      <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
-      <div className="space-y-4">
-        {items.map(item => (
-          <div key={item.id} className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
-            <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
-            <div className="flex-1 ml-4">
-              <h3 className="text-lg font-semibold">{item.name}</h3>
-              <p className="text-gray-500">{item.color}</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <select value={item.quantity} className="border rounded p-1">
-                {[...Array(10).keys()].map(i => (
-                  <option key={i + 1} value={i + 1}>{i + 1}</option>
-                ))}
-              </select>
-              <span className="text-lg font-bold">${item.price.toFixed(2)}</span>
-            </div>
-            <button className="text-red-500 hover:text-red-700">🗑️</button>
-          </div>
-        ))}
-      </div>
-      <div className="mt-6 p-4 bg-white rounded-lg shadow">
-        <div className="flex justify-between mb-2">
-          <span className="text-lg">Subtotal</span>
-          <span className="text-lg">${subtotal.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between mb-2">
-          <span className="text-lg">Shipping</span>
-          <span className="text-lg">${shipping.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between font-bold text-lg">
-          <span>Total</span>
-          <span>${total.toFixed(2)}</span>
-        </div>
-        <button className="mt-4 w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800">Confirm payment</button>
-        <button className="mt-2 w-full py-2 rounded-lg hover:bg-gray-200">Continue Shopping</button>
-      </div>
-    </div>
-  );
+  const navigate =useNavigate()
+  const dispatch=useDispatch()
+//   useEffect(()=>{
+//     dispatch(fetchCartItem())
+// },[])
+const {cartItem}=useSelector((state)=>state.cart)
+const totalPrice=cartItem.reduce((total,cartItem)=>{return total+cartItem.product.price*cartItem.quantity},0)
+const pricedetails={
+    Total:totalPrice,
+    Discount:0.0,
+    Tax:0.0,
+    Shipping:100.0
 }
+
+const HandleQuantity=(productId,newQuantity)=>{
+        newQuantity = Math.max(1, newQuantity);
+        dispatch(updateCartItem(productId, newQuantity));
+    
+}
+
+const HandleRemove=(productId)=>{
+    const Id=productId
+    dispatch(RemoveItemFromCart(Id))
+}
+return(
+    
+  <div className="font-sans md:max-w-7xl max-md:max-w-xl mx-auto  bg-white py-4">
+            
+            {/* <div className="mt-6 w-10 m-auto">
+                <div className="inline-block h-10 w-10 text-blue-500  animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                    role="status">
+                    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                </div>
+            </div> */}
+            {
+                cartItem.length?(
+                <div className="grid md:grid-cols-3 md:gap-6 lg:gap-32">
+                    <div className="md:col-span-2 bg-gray-100 p-4 rounded-md">
+                        <h2 className="text-2xl font-bold text-gray-800">Cart</h2>
+                        <hr className="border-gray-300 mt-4 mb-8" />
+
+                    {
+                        cartItem.length?(cartItem.map((data)=>{
+                            return(
+                                <div key={data?.product?.id} className="space-y-4">
+                                    <div className="grid grid-cols-3 mt-3 items-center gap-4">
+                                        <div className="col-span-2 flex items-center gap-4">
+                                            <div className="w-32 h-32 shrink-0   bg-white p-2 rounded-md">
+                                                <img src={data?.product?.img} className="w-full h-full rounded-md" />
+                                            </div>
+            
+                                            <div>
+                                                <h3 className="text-base font-bold text-gray-800">{data?.product?.pName}</h3>
+                                                <h6 onClick={()=>HandleRemove(data?.productId)} className="text-xs text-red-500 cursor-pointer mt-0.5">Remove</h6>
+            
+                                                <div className="flex gap-4 mt-4">
+                                                    <div>
+                                                        <button type="button"
+                                                            className="flex items-center px-2.5 py-1.5 border border-gray-300 text-gray-800 text-xs outline-none bg-transparent rounded-md">
+                                                            <svg onClick={()=>HandleQuantity(data?.product?.id,data?.quantity-1)} min={2} xmlns="http://www.w3.org/2000/svg" class="w-2.5 fill-current" viewBox="0 0 124 124">
+                                                                <path d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z" data-original="#000000"></path>
+                                                            </svg>
+            
+                                                            <span className="mx-2.5">{data?.quantity}</span>
+                                                            <svg onClick={()=>HandleQuantity(data?.product?.id,data?.quantity+1)} xmlns="http://www.w3.org/2000/svg" class="w-2.5 fill-current" viewBox="0 0 42 42">
+                                                                <path d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z" data-original="#000000"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="ml-auto">
+                                            <h4 className="text-base font-bold text-gray-800">Rs {data?.product?.price}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })):""
+                    }
+                    </div>
+
+                    <div className="bg-gray-100 mt-4 md:m-0 rounded-md p-4 md:sticky top-0">
+                        <div className="flex border border-blue-600 overflow-hidden rounded-md">
+                            <input type="email" placeholder="Promo code"
+                                className="w-full outline-none bg-white text-gray-600 text-sm px-4 py-2.5" />
+                            <button type='button' className="flex items-center justify-center font-semibold tracking-wide bg-blue-600 hover:bg-blue-700 px-4 text-sm text-white">
+                                Apply
+                            </button>
+                        </div>
+
+                        <ul className="text-gray-800 mt-8 space-y-4">
+                            <li className="flex flex-wrap gap-4 text-base">Discount <span className="ml-auto font-bold">Rs {pricedetails&&pricedetails.Discount}</span></li>
+                            <li className="flex flex-wrap gap-4 text-base">Shipping <span className="ml-auto font-bold">Rs {pricedetails&&pricedetails.Shipping}</span></li>
+                            <li className="flex flex-wrap gap-4 text-base">Tax <span className="ml-auto font-bold">Rs {pricedetails&&pricedetails.Tax}</span></li>
+                            <li className="flex flex-wrap gap-4 text-base font-bold">Total <span className="ml-auto">Rs {pricedetails&&pricedetails.Total-pricedetails.Discount+pricedetails.Shipping+pricedetails.Tax}</span></li>
+                        </ul>
+
+                        <div className="mt-8 space-y-2">
+                            <button type="button" className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-blue-600 hover:bg-blue-700 text-white rounded-md">Checkout</button>
+                            <button type="button" onClick={()=>navigate('/product')} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent text-gray-800 border border-gray-300 rounded-md">Continue Shopping  </button>
+                        </div>
+                    </div>
+                </div>):(
+                    <h2 className="font-bold text-red-500 text-2xl text-center my-40">Cart is empty Please add some product to the cart</h2>
+                )
+            }
+        </div>
+)};
 
 export default Cart;

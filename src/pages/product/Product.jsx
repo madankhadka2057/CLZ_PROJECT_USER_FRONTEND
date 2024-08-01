@@ -13,7 +13,7 @@ const closeModal=()=>{
 
   useEffect(() => {
     dispatch(fetchProduct())
-  }, [])
+  },[])
   const { data } = useSelector((state) => state.product)
 
   const handleCart = (productId) => {
@@ -36,11 +36,11 @@ const closeModal=()=>{
           <div className="mt-10 grid relative grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4 lg:mt-16">
 
             {
-              data.map((product) => {
+             data?data.map((product) => {
                 return (
                   <article key={product.id} className="relative flex flex-col items-center overflow-hidden rounded-lg border">
                     <div onClick={()=>handleModalOpen(product.id)} className="aspect-square relative overflow-hidden">
-                      <img className="h-56 w-56 rounded-md cursor-pointer object-cover transition-all duration-300 group-hover:scale-125" src={product.img} alt="" />
+                      <img className="h-full w-full rounded-md cursor-pointer  transition-all duration-300 group-hover:scale-125" src={product.img} alt="" />
                     </div>
                     <div className="absolute top-0 left-0 m-2 rounded-full bg-white">
                       <p className="rounded-full bg-emerald-500 p-1 text-[8px] font-bold uppercase tracking-wide text-white sm:py-1 sm:px-3">Sale</p>
@@ -58,7 +58,9 @@ const closeModal=()=>{
                     </button>
                   </article>
                 )
-              })
+              }):(
+                <h2 className="font-bold text-red-500 text-2xl">Product is not added yet</h2>
+              )
             }
             {toggleModal?<ProductModel product={{data,productId}} onClose={closeModal}/>:""}
           </div>

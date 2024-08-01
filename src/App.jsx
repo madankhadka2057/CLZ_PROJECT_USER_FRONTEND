@@ -12,24 +12,37 @@ import Cart from './pages/Cart/Cart.jsx'
 import ScrollManager from './global/scroller/ScrollerManager.js'
 import ScrollBtn from './global/scroller/ScrollBtn.jsx'
 import Register from './pages/register/Register.jsx'
+import ProtectedRoute from './ProtectedRoute.jsx'
+import RedirectIfAuthenticated from './RedirectIfAuthenticated.jsx'
 function App() {
+  const token=localStorage.getItem('token')
   return (
+    <>
+    
     <Provider store={Store}>
       <BrowserRouter>
         <Navbar />
         <ScrollManager />
         <ScrollBtn/>
         <Routes>
-          <Route path='/singup' element={<Register/>} />
+          <Route element={<RedirectIfAuthenticated/>}>
+            <Route path='/singup' element={<Register/>} />
+          </Route>
+          <Route element={<RedirectIfAuthenticated/>}>
+            <Route path='/login' element={<Login/>} />
+          </Route>
           <Route path='/home' element={<Home />} />
-          <Route path='/login' element={<Login />} />
           <Route path='/product' element={<Product />} />
-          <Route path='/cart' element={<Cart />} />
+          
+          <Route element={<ProtectedRoute />}>
+                <Route path="/cart" element={<Cart />} />
+          </Route>
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
         <Footer />
       </BrowserRouter>
     </Provider>
+    </>
   )
 }
 

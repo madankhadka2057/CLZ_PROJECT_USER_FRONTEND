@@ -17,12 +17,17 @@ const ContactUs = () => {
 
   const formSubmit = async (data) => {
     reset()
-    const response = await authenticatedApi.post('user/contact', data)
-    console.log(response)
+    const response = await authenticatedApi.post('user/contact', data).then(()=>{
+      alert("Message sent successfully")
+    }).catch((error)=>{
+      alert("Something went wrong please try again")
+    })
+
   }
 
   return (
-    <div id="contactus" className="  font-[sans-serif] max-w-6xl mx-auto relative bg-white rounded-lg md:py-6">
+    <div id="contactus" className="  font-[sans-serif] max-w-6xl
+     mx-auto relative bg-white rounded-lg md:py-6">
       <div className="relative w-full text-center flex justify-center items-center ">
         <h2 className="lg:text-4xl md:text-3xl text-xl w-full font-bold text-gray-900 leading-[3.25rem] dark:text-white lg:mb-6 mx-auto max-w-max  lg:mx-0">Stay connect to with us</h2>
       </div>

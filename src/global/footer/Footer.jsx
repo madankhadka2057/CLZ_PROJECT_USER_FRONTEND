@@ -1,7 +1,7 @@
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0b0e37] text-white py-12 px-4 font-sans tracking-wide">
+    <footer className="bg-[#0b0e37] flex justify-center  text-white py-12 px-4 font-sans tracking-wide">
       <div className="text-center">
         <h6 className="text-base">Stay connected with us:</h6>
 

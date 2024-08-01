@@ -35,7 +35,7 @@ const ProductModel = ({ product, onClose }) => {
                     </div>
                     {/* <!-- Modal body --> */}
                     <div className=" grid  relative grid-cols-1 gap-6 sm:grid-cols-1 w-full sm:gap-4 ">
-                        <div className="relative flex flex-col items-center overflow-hidden rounded-lg border">
+                        <div className="relative flex flex-col items-center overflow-hidden border-t-0 border">
                             <div className="aspect-square relative overflow-hidden">
                                 <img className="h-56 w-56 cursor-pointer object-cover transition-all duration-300 group-hover:scale-125" src={newData.img} alt="" />
                             </div>
