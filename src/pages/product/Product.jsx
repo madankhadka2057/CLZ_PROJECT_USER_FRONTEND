@@ -3,6 +3,7 @@ import { fetchProduct, setProduct } from "../../store/productSlice"
 import { useDispatch, useSelector } from "react-redux"
 import { setCartItem } from "../../store/cartSlice"
 import ProductModel from "./ProductModel"
+import Tostify from "../../global/Toastify/Tostify"
 function Product() {
   const dispatch = useDispatch()
 const [toggleModal,setToggleModal]=useState(false)
@@ -13,6 +14,11 @@ const closeModal=()=>{
 
   useEffect(() => {
     dispatch(fetchProduct())
+    // const toastData = JSON.parse(sessionStorage.getItem("toastMessage"));
+      
+    //   if (toastData) {
+    //     Tostify(toastData);
+    //     }
   },[])
   const { data } = useSelector((state) => state.product)
 
@@ -30,7 +36,7 @@ const closeModal=()=>{
       <section className=" py-12  text-gray-700 sm:py-16 lg:py-20 ">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-md text-center">
-            <h2 className="font-serif text-2xl font-bold sm:text-3xl">Fresh Fruits & Vegetables</h2>
+            <h2 className="font-serif text-2xl font-bold sm:text-3xl">Fresh Foods</h2>
           </div>
 
           <div className="mt-10 grid relative grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4 lg:mt-16">

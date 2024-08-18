@@ -3,6 +3,7 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchCartItem } from '../../store/cartSlice';
+import Tostify from '../Toastify/Tostify';
 const Navbar = () => {
   const dispatch=useDispatch()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,17 +31,29 @@ const Navbar = () => {
   // console.log(token)
   const HandleLogout=()=>{
     localStorage.removeItem('token')
+    sessionStorage.setItem("toastMessage", JSON.stringify({ status: "success", message: "Logout successfully" }));
     window.location.reload();
   }
+  const data=JSON.parse(sessionStorage.getItem("toastMessage"));
+  const status=data?.status
   useEffect(() => {
     dispatch(fetchCartItem());
-  }, [dispatch]);
-
+    const toastData = JSON.parse(sessionStorage.getItem("toastMessage"));
+    if (toastData) {
+      Tostify(toastData);
+    }
+  }, []);
+  useEffect(() => {
+    const toastData = JSON.parse(sessionStorage.getItem("toastMessage"));
+    if (toastData) {
+      Tostify(toastData);
+    }
+  }, []);
   return (
     <nav onClick={handleModel} className=" sticky top-0 z-10 block w-full max-w-full px-4 py-2 text-black-800 bg-white border rounded-none shadow-md h-max border-white/80 bg-opacity-80 backdrop-blur-2xl backdrop-saturate-200 lg:px-8  lg:py-4">
       <div ref={refElement} className="flex items-center justify-between text-blue-gray-900">
         <a
-          href="#"
+          onClick={()=>navigate("/home")}
           className="mr-4 tracking-wide text-2xl hello block cursor-pointer py-1.5 font-sans  font-medium leading-relaxed text-inherit antialiased"
         >
           Online Food
@@ -59,7 +72,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li  className="block p-1 font-sans text-sm antialiased cursor-pointer font-medium leading-normal text-blue-gray-900 hover:rounded-[50px] px-4 py-2 hover:bg-gray-200">
-                <a href="javascript:void(0)" className="flex font-bold items-center ">
+                <a onClick={()=>{navigate('/myorder')}} className="flex font-bold items-center ">
                   My Order
                 </a>
               </li>
@@ -68,7 +81,7 @@ const Navbar = () => {
                 Contact us
                 </a>
               </li>
-              {token&&<div  className="relative cursor-pointer">
+              {cartItem.length>0&&<div  className="relative cursor-pointer">
                 <FaShoppingCart onClick={() => { navigate('/cart') }} className="text-2xl text-gray-800 hover:text-gray-600 cursor-pointer" />
                 <span className="absolute bottom-4 left-6 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-white bg-red-500 rounded-full" >{cartItem.length}</span>
               </div>}
@@ -141,17 +154,17 @@ const Navbar = () => {
       >
         <ul className="flex  px-3 flex-col gap-2  mt-2 mb-4 lg:mb-0 sm:mt-0 sm:flex-row sm:items-center sm:gap-6">
           <li className="block p-1 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900 hover:bg-slate-400 hover:bg-opacity-10 active:text-blue-600">
-            <a onClick={() => handleScroller(refElement)} className="flex items-center">
+            <a  onClick={() => handleScroller(refElement)} className="flex items-center">
               Home
             </a>
           </li>
           <li onClick={() => { navigate('/product') }} className="block p-1 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900 hover:bg-slate-400 hover:bg-opacity-10">
-            <a href="javascript:void(0)" className="flex items-center">
+            <a  className="flex items-center">
               Product
             </a>
           </li>
           <li className="block p-1 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900 hover:bg-slate-400 hover:bg-opacity-10">
-            <a href="javascript:void(0)" className="flex items-center">
+            <a onClick={()=>navigate('/myorder')} className="flex items-center">
               My Order
             </a>
           </li>
@@ -160,8 +173,8 @@ const Navbar = () => {
             Contact us
             </a>
           </li>
-          {token&&<div className="relative" >
-            <FaShoppingCart onClick={() => { navigate('/product') }}s className="text-2xl text-gray-800 hover:text-gray-600 cursor-pointer" />
+          {cartItem.length>0&&<div className="relative" >
+            <FaShoppingCart onClick={() => { navigate('/product') }} className="text-2xl text-gray-800 hover:text-gray-600 cursor-pointer" />
             <span className="absolute gap-6 bottom-4 left-6 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">{cartItem.length}</span>
           </div>}
         </ul>

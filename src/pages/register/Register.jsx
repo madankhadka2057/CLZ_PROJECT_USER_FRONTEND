@@ -15,10 +15,10 @@ const Register = () => {
     return (
         <div className="max-w-4xl mx-auto font-[sans-serif] p-6">
             <div className="text-center mb-16">
-                <a href="javascript:void(0)"><img
+                {/* <a ><img
                     src="https://readymadeui.com/readymadeui.svg" alt="logo" className='w-52 inline-block' />
-                </a>
-                <h4 className="text-gray-800 text-base font-semibold mt-6">Sign up into your account</h4>
+                </a> */}
+                <h4 className="text-gray-800 font-semibold text-3xl mt-6">Sign up into your account</h4>
             </div>
 
             <form onSubmit={handleSubmit(HandleRegister)}>
@@ -41,6 +41,14 @@ const Register = () => {
                             })
                             }
                         />
+                        {
+                            errors.userName&&( <p className="text-xs text-red-500 flex items-center mt-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" fill="currentColor" className="mr-2" viewBox="0 0 24 24">
+                                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            {errors.userName.message}
+                            </p>)
+                         }
                     </div>
                     <div>
                         <label className="text-gray-800 text-sm mb-2 block">Email Id</label>
@@ -56,6 +64,14 @@ const Register = () => {
 
                             }
                         />
+                        {
+                            errors.email&&( <p className="text-xs text-red-500 flex items-center mt-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" fill="currentColor" className="mr-2" viewBox="0 0 24 24">
+                                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            {errors.email.message}
+                            </p>)
+                         }
                     </div>
                     <div>
                         <label className="text-gray-800 text-sm mb-2 block">Mobile No.</label>
@@ -73,14 +89,35 @@ const Register = () => {
                             })
                             }
                         />
+                        {
+                            errors.phoneNumber&&( <p className="text-xs text-red-500 flex items-center mt-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" fill="currentColor" className="mr-2" viewBox="0 0 24 24">
+                                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            {errors.phoneNumber.message}
+                            </p>)
+                         }
+                        
                     </div>
                     <div>
                         <label className="text-gray-800 text-sm mb-2 block">Password</label>
                         <input name="password" type="password" className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter password" 
-                        {...register("password",{
-                            required:'Please entered your password'
+                        {...register("password", {
+                            required: 'Please enter your password',
+                            pattern: {
+                                value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                                message: 'Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character'
+                            }
                         })}
                         />
+                        {
+                            errors.password&&( <p className="text-xs text-red-500 flex items-center mt-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" fill="currentColor" className="mr-2" viewBox="0 0 24 24">
+                                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            {errors.password.message}
+                            </p>)
+                         }
                         <ul className="mt-2 px-4 grid sm:grid-cols-2 gap-y-1 gap-x-6 w-max list-disc">
                             <li className="text-xs text-orange-500">minimum 8 characters</li>
                             <li className="text-xs text-orange-500">one uppercase characters</li>

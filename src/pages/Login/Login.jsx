@@ -1,9 +1,10 @@
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useLocation, useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope,faEye,faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import Tostify from "../../global/Toastify/Tostify"
 /* eslint-disable */
 const Login = () => {
   const navigate = useNavigate()
@@ -18,18 +19,26 @@ const Login = () => {
       localStorage.setItem("token", response.data.token)
       if (state?.prev_location?.pathname)
         navigate(state.prev_location.pathname)
-        window.location.reload();
+        window.location.href="/home"
+        sessionStorage.setItem("toastMessage", JSON.stringify({ status: "success", message: "Login successfully" }));
     }else {
       navigate('/home')
+      sessionStorage.setItem("toastMessage", JSON.stringify({ status: "success", message: "Login successfully" }));
     }
 
   }
 
   const TogglePasswordType =()=>{
     setVisible(!Visible)
-    // console.log(!Visible ? "false" : "true");
   }
-
+  useEffect(() => {
+    const toastData = JSON.parse(sessionStorage.getItem("toastMessage"));
+    
+    if (toastData) {
+      Tostify(toastData);
+    }
+  }, []);
+   
   return (
     <>
       <div className="font-[sans-serif] text-[#333]">
@@ -39,7 +48,7 @@ const Login = () => {
               <form onSubmit={handleSubmit(handleLogin)}>
                 <div className="mb-12">
                   <h3 className="text-3xl font-extrabold">Sign in</h3>
-                  <p className="text-sm mt-4 ">Don't have an account <a href="javascript:void(0);" className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</a></p>
+                  <p className="text-sm mt-4 ">Don't have an account <a  onClick={()=>navigate("/singup")} className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</a></p>
                 </div>
                 <div>
                   <label className="text-xs block mb-2">Email</label>
@@ -96,7 +105,7 @@ const Login = () => {
                     </label>
                   </div>
                   <div>
-                    <a href="jajvascript:void(0);" className="text-blue-600 font-semibold text-sm hover:underline">
+                    <a  className="text-blue-600 font-semibold text-sm hover:underline">
                       Forgot Password?
                     </a>
                   </div>
