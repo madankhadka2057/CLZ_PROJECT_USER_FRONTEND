@@ -17,6 +17,7 @@ import RedirectIfAuthenticated from './RedirectIfAuthenticated.jsx'
 import CheckOut from './pages/checkout/CheckOut.jsx'
 import MyOrder from './pages/myorder/MyOrder.jsx'
 import OrderDetails from './pages/orderdetails/OrderDetails.jsx'
+import Index from './Admin/Index.jsx'
 function App() {
   const token=localStorage.getItem('token')
   return (
@@ -28,10 +29,11 @@ function App() {
         <ScrollManager />
         <ScrollBtn/>
         <Routes>
+          {/* <Route element={<RedirectIfAuthenticated/>}>
+            
+          </Route> */}
           <Route element={<RedirectIfAuthenticated/>}>
             <Route path='/singup' element={<Register/>} />
-          </Route>
-          <Route element={<RedirectIfAuthenticated/>}>
             <Route path='/login' element={<Login/>} />
           </Route>
           <Route path='/home' element={<Home />} />
@@ -44,6 +46,7 @@ function App() {
                 <Route path='/orderdetails/:id' element={<OrderDetails/>}/>
           </Route>
           <Route path="*" element={<Navigate to="/home" replace />} />
+          <Route path='/admin/dashboard' element={<Index/>}/>
         </Routes>
         <Footer />
       </BrowserRouter>

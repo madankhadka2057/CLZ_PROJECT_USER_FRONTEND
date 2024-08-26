@@ -72,7 +72,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li  className="block p-1 font-sans text-sm antialiased cursor-pointer font-medium leading-normal text-blue-gray-900 hover:rounded-[50px] px-4 py-2 hover:bg-gray-200">
-                <a onClick={()=>{navigate('/myorder')}} className="flex font-bold items-center ">
+                <a onClick={()=>{navigate('/myorder')}} className={`  ${location?.pathname=="/myorder"?"text-blue-700":""} flex font-bold items-center `}>
                   My Order
                 </a>
               </li>
