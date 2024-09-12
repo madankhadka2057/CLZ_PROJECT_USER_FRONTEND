@@ -4,35 +4,39 @@ import { useDispatch, useSelector } from "react-redux"
 import { setCartItem } from "../../store/cartSlice"
 import ProductModel from "./ProductModel"
 import Tostify from "../../global/Toastify/Tostify"
+import { useNavigate } from "react-router-dom"
 function Product() {
   const dispatch = useDispatch()
-const [toggleModal,setToggleModal]=useState(false)
-const [productId,setProductId]=useState('')
-const closeModal=()=>{
-  setToggleModal(false)
-}
+  const [toggleModal, setToggleModal] = useState(false)
+  const [productId, setProductId] = useState('')
+  const token = localStorage.getItem('token')
+  const navigate = useNavigate()
+  console.log(token)
+  const closeModal = () => {
+    setToggleModal(false)
+  }
 
   useEffect(() => {
     dispatch(fetchProduct())
-    // const toastData = JSON.parse(sessionStorage.getItem("toastMessage"));
-      
-    //   if (toastData) {
-    //     Tostify(toastData);
-    //     }
-  },[])
+  }, [])
   const { data } = useSelector((state) => state.product)
 
   const handleCart = (productId) => {
-    dispatch(setCartItem(productId))
+    if (!token) {
+      navigate('/login')
+    } else {
+      dispatch(setCartItem(productId))
+    }
+
   }
-  const handleModalOpen=(id)=>{
+  const handleModalOpen = (id) => {
     setProductId(id)
     setToggleModal(true)
 
   }
   return (
     <>
-   
+
       <section className=" py-12  text-gray-700 sm:py-16 lg:py-20 ">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-md text-center">
@@ -42,10 +46,10 @@ const closeModal=()=>{
           <div className="mt-10 grid relative grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4 lg:mt-16">
 
             {
-             data?data.map((product) => {
+              data ? data.map((product) => {
                 return (
                   <article key={product.id} className="relative flex flex-col items-center overflow-hidden rounded-lg border">
-                    <div onClick={()=>handleModalOpen(product.id)} className="aspect-square relative overflow-hidden">
+                    <div onClick={() => handleModalOpen(product.id)} className="aspect-square relative overflow-hidden">
                       <img className="h-full w-full rounded-md cursor-pointer  transition-all duration-300 group-hover:scale-125" src={product.img} alt="" />
                     </div>
                     <div className="absolute top-0 left-0 m-2 rounded-full bg-white">
@@ -64,11 +68,11 @@ const closeModal=()=>{
                     </button>
                   </article>
                 )
-              }):(
+              }) : (
                 <h2 className="font-bold text-red-500 text-2xl">Product is not added yet</h2>
               )
             }
-            {toggleModal?<ProductModel product={{data,productId}} onClose={closeModal}/>:""}
+            {toggleModal ? <ProductModel product={{ data, productId }} onClose={closeModal} /> : ""}
           </div>
         </div>
       </section>

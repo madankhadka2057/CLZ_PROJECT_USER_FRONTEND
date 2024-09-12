@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { Api, authenticatedApi } from '../API/Api'
-
+import { useNavigate } from 'react-router-dom'
+// const navigate=useNavigate();
 const cartSlice = createSlice({
+    
     name: "cart",
     initialState: {
         data: [],
@@ -37,6 +39,7 @@ export default cartSlice.reducer
 
 export function setCartItem(productId) {
     return async function setCartItemThunk(dispatch) {
+
         const response=await authenticatedApi.post(`cart/addtocart`,{id:productId, quantity:1})
         dispatch(fetchCart(response.data.data))
         console.log(response.data.data)

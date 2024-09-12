@@ -1,4 +1,4 @@
-import { authenticatedApi } from "../API/Api";
+import { Api, authenticatedApi } from "../API/Api";
 
 import { createSlice } from "@reduxjs/toolkit"
 
@@ -14,16 +14,21 @@ const OrderSlice=createSlice({
         },
         setOrderDetails(state,action){
             state.data=action.payload
+        },
+        filterDelete:(state,action)=>{
+            state.data=state.data.filter((data)=>{
+               return data.id!=action.payload.id
+            })
         }
     }
 })
 export default OrderSlice.reducer
-export const {setOrder}=OrderSlice.actions
+export const {setOrder,filterDelete}=OrderSlice.actions
 
 export function fetchOrder(){
     return async function fetchOrderthunk(dispatch){
         const response= await authenticatedApi.get('/user/order/myorder')
-        dispatch(setOrder(response.data))
+        dispatch(setOrder(response.data.data))
     }
 }
 export function fetchOrderDetails(id){
@@ -53,5 +58,19 @@ export function cancleOrder(id) {
             }
         }
     };
+}
+export function deleteMyOrder(id){
+    return async function deleteMyOrderThunk(dispatch) {
+        try{
+            console.log(id)
+            const response=await authenticatedApi.delete(`/user/order/delete/${id}`)
+            if(response.status==200){
+                dispatch(filterDelete({id}))
+            }
+        }catch(err){
+            console.log(err)
+            alert("error")
+        }
+    }
 }
 

@@ -4,7 +4,9 @@ import './Tostify.css';
 import { useState } from 'react';
 
 const Tostify = ({ status, message }) => {
+    console.log(status,message)
     if (status === "success") {
+       
         const toastNode = document.createElement('div');
         toastNode.className = 'success';
         toastNode.innerHTML = `
@@ -22,7 +24,7 @@ const Tostify = ({ status, message }) => {
         `;
         Toastify({
             node: toastNode,
-            duration: 3000,
+            duration: 2000,
             destination: "https://github.com/apvarun/toastify-js",
             newWindow: true,
             close: false,
@@ -64,7 +66,7 @@ const Tostify = ({ status, message }) => {
 
         const toast = Toastify({
             node: toastNode,
-            duration: 3000, // 5 seconds
+            duration: 2000, // 5 seconds
             gravity: "top",
             position: "center",
             stopOnFocus: true,

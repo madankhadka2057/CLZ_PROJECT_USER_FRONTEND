@@ -42,7 +42,7 @@ const Footer = () => {
         </ul>
 
         <p className="text-base">&copy; 2023<a href='https://readymadeui.com/' target='_blank'
-          className="hover:underline mx-2">Online Food</a>All Rights Reserved.</p>
+          className="hover:underline mx-2">Food Plazaa</a>All Rights Reserved.</p>
       </div>
     </footer>
   )

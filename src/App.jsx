@@ -18,6 +18,7 @@ import CheckOut from './pages/checkout/CheckOut.jsx'
 import MyOrder from './pages/myorder/MyOrder.jsx'
 import OrderDetails from './pages/orderdetails/OrderDetails.jsx'
 import Index from './Admin/Index.jsx'
+import ViewProfile from './global/navbar/ViewProfile.jsx'
 function App() {
   const token=localStorage.getItem('token')
   return (
@@ -38,12 +39,13 @@ function App() {
           </Route>
           <Route path='/home' element={<Home />} />
           <Route path='/product' element={<Product />} />
-          
           <Route element={<ProtectedRoute />}>
+                <Route path='/viewprofile' element={<ViewProfile/>}/>
                 <Route path="/cart" element={<Cart />} />
                 <Route path='/Checkout' element={<CheckOut/>}/>
                 <Route path='/myorder' element={<MyOrder/>}/>
                 <Route path='/orderdetails/:id' element={<OrderDetails/>}/>
+
           </Route>
           <Route path="*" element={<Navigate to="/home" replace />} />
           <Route path='/admin/dashboard' element={<Index/>}/>

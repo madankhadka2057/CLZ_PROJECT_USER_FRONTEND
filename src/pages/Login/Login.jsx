@@ -1,44 +1,42 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useLocation, useNavigate } from "react-router-dom"
+import { json, useLocation, useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope,faEye,faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Tostify from "../../global/Toastify/Tostify"
 /* eslint-disable */
 const Login = () => {
   const navigate = useNavigate()
   const { handleSubmit, register, formState: { errors } } = useForm()
-  const [Visible,setVisible]=useState(false)
+  const [Visible, setVisible] = useState(false)
+  // const [rememberEmail, setRememberEmail] = useState()
+  // const [remember, setRemember] = useState(true)
   const location = useLocation()
   const { state } = location
+  // const toastData=JSON.parse(sessionStorage.getItem("toastMessage"));
+
   const handleLogin = async (data) => {
-    const response = await axios.post("http://localhost:3000/auth/login", data)
-    if (response.status === 200) {
+    try {
+      const response = await axios.post("http://localhost:3000/auth/login", data)
+      if (response.status === 200) {
 
-      localStorage.setItem("token", response.data.token)
-      if (state?.prev_location?.pathname)
-        navigate(state.prev_location.pathname)
-        window.location.href="/home"
+        localStorage.setItem("token", response.data.token)
+        if (state?.prev_location?.pathname)
+          navigate(state.prev_location.pathname)
+        window.location.href = "/home"
         sessionStorage.setItem("toastMessage", JSON.stringify({ status: "success", message: "Login successfully" }));
-    }else {
-      navigate('/home')
-      sessionStorage.setItem("toastMessage", JSON.stringify({ status: "success", message: "Login successfully" }));
+      } else {
+        Tostify({status:"error",message:"Login failed"});
+      }
+    } catch (error) {
+      Tostify({status:"error",message:error.response?.data?.message||"Login failed"});
     }
-
   }
-
-  const TogglePasswordType =()=>{
+  const TogglePasswordType = () => {
     setVisible(!Visible)
   }
-  useEffect(() => {
-    const toastData = JSON.parse(sessionStorage.getItem("toastMessage"));
-    
-    if (toastData) {
-      Tostify(toastData);
-    }
-  }, []);
-   
+ 
   return (
     <>
       <div className="font-[sans-serif] text-[#333]">
@@ -48,12 +46,12 @@ const Login = () => {
               <form onSubmit={handleSubmit(handleLogin)}>
                 <div className="mb-12">
                   <h3 className="text-3xl font-extrabold">Sign in</h3>
-                  <p className="text-sm mt-4 ">Don't have an account <a  onClick={()=>navigate("/singup")} className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</a></p>
+                  <p className="text-sm mt-4 ">Don't have an account <a onClick={() => navigate("/singup")} className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</a></p>
                 </div>
                 <div>
                   <label className="text-xs block mb-2">Email</label>
                   <div className="relative flex items-center">
-                    <input name="email" type="text" required className="w-full text-sm border-b border-gray-300 focus:border-[#333] px-2 py-3 outline-none" placeholder="Enter email"
+                    <input name="email" type="text"  required className="w-full text-sm border-b border-gray-300 focus:border-[#333] px-2 py-3 outline-none" placeholder="Enter email"
                       {...register("email", {
                         required: "Please entered your emali", pattern: {
                           value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
@@ -61,11 +59,11 @@ const Login = () => {
                         },
                       })}
                     />
-                     <FontAwesomeIcon icon={faEnvelope} /> 
-                     
+                    <FontAwesomeIcon className="absolute right-1" icon={faEnvelope} />
+
                   </div>
                   {
-                    errors.email&&( <p className="text-xs text-red-500 flex items-center mt-2">
+                    errors.email && (<p className="text-xs text-red-500 flex items-center mt-2">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" fill="currentColor" className="mr-2" viewBox="0 0 24 24">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
@@ -75,15 +73,21 @@ const Login = () => {
                 </div>
                 <div className="mt-8">
                   <label className="text-xs block mb-2">Password</label>
-                  <div className="relative flex items-center">
-                    <input name="password" type={Visible?"text":"password"} required className="w-full text-sm border-b border-gray-300 focus:border-[#333] px-2 py-3 outline-none" placeholder="Enter password"
-                      {...register("password", { required: "Please entered your password" })}
+                  <div className="relative  flex items-center">
+                    <input name="password" type={Visible ? "text" : "password"} required className="w-full text-sm border-b border-gray-300 focus:border-[#333] px-2 py-3 outline-none" placeholder="Enter password"
+                      {...register("password",{
+                        required: 'Please enter your password',
+                        pattern: {
+                            value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                            message: 'Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character'
+                        }
+                    })}
                     />
-                    {Visible?<span onClick={()=>TogglePasswordType()} >< FontAwesomeIcon  icon={faEye} /></span>:
-                    <span onClick={()=>TogglePasswordType()} ><FontAwesomeIcon icon={faEyeSlash} /></span>}
+                    {Visible ? <span className="absolute right-1" onClick={() => TogglePasswordType()} >< FontAwesomeIcon icon={faEye} /></span> :
+                      <span className="absolute right-1" onClick={() => TogglePasswordType()} ><FontAwesomeIcon icon={faEyeSlash} /></span>}
                   </div>
                   {
-                    errors.password&&( <p className="text-xs text-red-500 flex items-center mt-2">
+                    errors.password && (<p className="text-xs text-red-500 flex items-center mt-2">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" fill="currentColor" className="mr-2" viewBox="0 0 24 24">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
@@ -95,17 +99,20 @@ const Login = () => {
                     <li className="text-xs text-orange-500">one uppercase characters</li>
                     <li className="text-xs text-orange-500">one special characters</li>
                     <li className="text-xs text-orange-500">one number</li>
-                   </ul>
+                  </ul>
                 </div>
                 <div className="flex items-center justify-between gap-2 mt-5">
                   <div className="flex items-center">
-                    <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                    <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      // onChange={handleCheckboxChange}
+                      {...register("remember")}
+                     />
                     <label htmlFor="remember-me" className="ml-3 block text-sm">
                       Remember me
                     </label>
                   </div>
                   <div>
-                    <a  className="text-blue-600 font-semibold text-sm hover:underline">
+                    <a className="text-blue-600 font-semibold text-sm hover:underline">
                       Forgot Password?
                     </a>
                   </div>
